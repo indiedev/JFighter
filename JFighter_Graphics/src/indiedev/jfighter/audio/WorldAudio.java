@@ -22,6 +22,7 @@ public class WorldAudio
 		try
 		{
 			//try to make it dynamic music selection(depending of stage selected)
+			//try to use ogg
 			ais= AudioSystem.getAudioInputStream(World_AudioConstants.WORLDIMG_STAGE_1);
 			clip=AudioSystem.getClip();
 		}
