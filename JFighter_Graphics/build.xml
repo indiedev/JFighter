@@ -1,0 +1,22 @@
+<project name="JFighter" basedir=".">
+	<target name="clean" description="Cleans the older jar files">
+		<delete dir="executables" />	
+	</target>
+	
+	<target name="info" description="Views additional information">
+		<echo>${basedir}</echo>
+	</target>
+	
+	<target name="jar" description="Creates JAR from the bytecodes">
+		<jar basedir="bin" destfile="executables\JFighter.jar">
+			<manifest>
+				<attribute name="Author" value="com.java.praveen" />
+				<attribute name="Main-Class" value="com.max.MainFrame" />
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="generate" description="Packs the compressed resources and jar file">
+		
+	</target>
+</project>
