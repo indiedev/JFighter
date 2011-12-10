@@ -22,7 +22,7 @@ public class MainFrame extends JFrame implements WindowListener
 	
 	MainFrame()
 	{
-		super("JFighter");
+		super("JFighter MainFrame");
 		
 		//init render panel
 		panel_render=new RenderPanel();
