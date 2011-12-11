@@ -17,8 +17,8 @@ public abstract class AbstractNPlayableActor extends AbstractActor
 	Image Img_Left,Img_Right;
 //	Image Img_Up,Img_Down;
 	
-	AbstractNPlayableActor(String ActorName, int actorInitDir) {
-		super(ActorName, actorInitDir);
+	AbstractNPlayableActor(String ActorName, int actorInitDir, int xPos) {
+		super(ActorName, actorInitDir,xPos);
 		
 		System.out.println("Creating NP_Actor :"+ActorName);
 	}
@@ -60,9 +60,7 @@ public abstract class AbstractNPlayableActor extends AbstractActor
 	public void populateActorImages()
 	{
 		//initialize the Img_actor Array
-		
-		try
-		{
+
 			Img_Left=loadActorImage( new File(ActorConstants.BASEDIR_IMG_NP_ACTORS.getPath()+"\\"+Actor_Name+"\\"+ActorConstants.actorImageNames[0]));
 			Img_Right=loadActorImage(new File(ActorConstants.BASEDIR_IMG_NP_ACTORS.getPath()+"\\"+Actor_Name+"\\"+ActorConstants.actorImageNames[1]));
 			//Img_Up=loadActorImage(new File("Images\\"+Actor_Name+"\\"+ActorConstants.actorImageNames[2]));
@@ -71,11 +69,6 @@ public abstract class AbstractNPlayableActor extends AbstractActor
 			setCurrentImage(Img_Right);
 			
 			System.out.println(Actor_Name+":Loaded all images.Size[w,h]:"+getCurrentImage().getWidth(null)+" , "+getCurrentImage().getHeight(null));
-		}
-		catch(Exception e)
-		{
-			System.out.println(Actor_Name+":Unable to load image!!!"+e.getLocalizedMessage());
-		}
 	}
 
 	@Override

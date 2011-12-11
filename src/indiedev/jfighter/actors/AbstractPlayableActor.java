@@ -26,8 +26,8 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 	//Current task for thread
 	String currentTask=null;
 	
-	AbstractPlayableActor(String actorName, int actorInitDir) {
-		super(actorName, actorInitDir);
+	AbstractPlayableActor(String actorName, int actorInitDir,int xPos) {
+		super(actorName, actorInitDir,xPos);
 		System.out.println("Creating P_Actor  :"+actorName);
 
 	}

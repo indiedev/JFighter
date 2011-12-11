@@ -11,8 +11,8 @@ package indiedev.jfighter.actors;
  */
 public class AbstractProjectile extends AbstractNPlayableActor{
 
-	AbstractProjectile(String actorName, int actorInitDir) {
-		super(actorName, actorInitDir);
+	AbstractProjectile(String actorName, int actorInitDir,int xPos) {
+		super(actorName, actorInitDir,xPos);
 	}
 	
 	public void destroy()
