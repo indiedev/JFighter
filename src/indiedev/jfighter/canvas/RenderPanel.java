@@ -3,6 +3,7 @@ package indiedev.jfighter.canvas;
 import indiedev.jfighter.Helpers.ImageHelper;
 import indiedev.jfighter.Helpers.World_ImageConstants;
 import indiedev.jfighter.actors.AbstractActor;
+import indiedev.jfighter.actors.AbstractNPlayableActor;
 import indiedev.jfighter.actors.AbstractPlayableActor;
 import indiedev.jfighter.actors.TestFan;
 import indiedev.jfighter.controller.PlayableActorMovementListener;
@@ -38,12 +39,8 @@ public class RenderPanel extends JPanel implements ActionListener{
 	TestFan fan=new TestFan();
 	
 	//arrlist containing all actors
-	ArrayList<AbstractPlayableActor> actorsList=new ArrayList<AbstractPlayableActor>();
+	private final ArrayList<AbstractActor> actorsList=new ArrayList<AbstractActor>();
 	
-
-
-
-
 	public RenderPanel()
 	{
 		System.out.println("Initializing BGPanel...");
@@ -88,7 +85,7 @@ public class RenderPanel extends JPanel implements ActionListener{
 		{
 			actorsList.get(i).drawActor(g2d,false);
 		}
-		fan.draw(g2d,actorsList.get(0).getCurrentImageCoords());
+		fan.draw(g2d,actorsList.get(1).getCurrentImageCoords());
 	}
 	
 	//called automatically by "Timer" class
@@ -103,11 +100,16 @@ public class RenderPanel extends JPanel implements ActionListener{
 		}
 	}
 	
+	public void addNonPlayableActorsToScene(AbstractNPlayableActor t_nActor)
+	{
+		actorsList.add(t_nActor);
+		System.out.println("Added a new NActor:"+t_nActor.getActorName());
+	}
 	public void addActorsToScene(AbstractPlayableActor t_actor)
 	{
 		actorsList.add(t_actor);
 		//add to keylistener
-		keyL_PActorHandler.setActorToHandle(t_actor);
+			keyL_PActorHandler.setActorToHandle(t_actor);
 		System.out.println("Added a new Actor:"+t_actor.getActorName());
 	}
 	
