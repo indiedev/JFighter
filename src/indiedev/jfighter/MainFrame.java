@@ -3,6 +3,7 @@ package indiedev.jfighter;
 import indiedev.jfighter.Helpers.ActorConstants;
 import indiedev.jfighter.actors.AbstractPlayableActor;
 import indiedev.jfighter.actors.Scorpion;
+import indiedev.jfighter.actors.npa_crate;
 import indiedev.jfighter.audio.WorldAudio;
 import indiedev.jfighter.canvas.RenderPanel;
 
@@ -27,11 +28,11 @@ public class MainFrame extends JFrame implements WindowListener
 		//init render panel
 		panel_render=new RenderPanel();
 
-			//init actors
-			AbstractPlayableActor scorpion=new Scorpion(ActorConstants.worldRight);
-	
 			//adding actors to renderpanel
-			panel_render.addActorsToScene(scorpion);
+			panel_render.addNonPlayableActorsToScene(new npa_crate(100));
+			panel_render.addNonPlayableActorsToScene(new npa_crate(260));
+			panel_render.addNonPlayableActorsToScene(new npa_crate(420));
+			panel_render.addActorsToScene(new Scorpion(ActorConstants.worldRight));
 
 		//init audiosystem
 		world_Audio=new WorldAudio();
