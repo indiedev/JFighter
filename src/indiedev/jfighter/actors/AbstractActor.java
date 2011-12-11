@@ -9,8 +9,6 @@ import java.io.File;
 
 import javax.swing.ImageIcon;
 
-
-
 /*
  * Default Implementation of Actors.. 
  */
@@ -51,7 +49,7 @@ public abstract class AbstractActor
 		this.currentImage = currentImage;
 	}
 
-	AbstractActor(String ActorName,int actorInitDir)
+	AbstractActor(String ActorName,int actorInitDir,int xPos)
 	{
 		//set the ActorName
 		this.Actor_Name=ActorName;
@@ -63,7 +61,7 @@ public abstract class AbstractActor
 		//setting actor direction for 1st time
 		updateCurrentActorImageDirection(actorInitDir);
 
-		initActorPosition(100);
+		initActorPosition(xPos);
 	}
 	
 	/*
@@ -96,10 +94,14 @@ public abstract class AbstractActor
 	{
 		try
 		{
+			if(!f.exists())
+				throw new NullPointerException("Path caused: "+f.getPath());
+				
 			return new ImageIcon(f.getPath()).getImage();
-		}catch(Exception e)
+		}catch(NullPointerException e)
 		{
-			System.out.println("Unable to load image for Actor{"+Actor_Name+"}"+e.getLocalizedMessage());
+			System.out.println("Unable to load image for Actor{"+Actor_Name+"}!!: "+e.getMessage());
+			System.exit(0);
 			return null;
 		}
 	}
@@ -145,12 +147,7 @@ public abstract class AbstractActor
 		ypos-=dy;
 	}
 	
-	public void setMovementDirection(int temp)
-	{
-		this.currentMovementDirection=temp;
-		
-	}
-	
+
 	public int getCurrentMovementDirection()
 	{
 		return this.currentMovementDirection;
@@ -228,11 +225,11 @@ public abstract class AbstractActor
 	//returns currentActor image-bounds as Rectangle (also used for collision detection)
 	public Rectangle getCurrentImageCoords()
 	{
-		if(getCurrentFacingDirection()==ActorConstants.worldLeft || getCurrentFacingDirection()==ActorConstants.worldRight)//during left normal stance
+/*		if(getCurrentFacingDirection()==ActorConstants.worldLeft || getCurrentFacingDirection()==ActorConstants.worldRight)//during left normal stance
 		{
 			//return new Rectangle(xpos,ypos,getCurrentImage().getWidth(null)-300,getCurrentImage().getHeight(null));
 			return new Rectangle(0,0,1,1);
-		}
+		}*/
 		return new Rectangle(xpos,ypos,getCurrentImage().getWidth(null),getCurrentImage().getHeight(null));
 	}
 }
