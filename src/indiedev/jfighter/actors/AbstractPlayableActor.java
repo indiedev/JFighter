@@ -251,7 +251,7 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 		
 	}
 	
-	public synchronized void jump()
+	public void jump()
 	{
 		try
 		{
@@ -297,7 +297,7 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 		}
 	}
 	
-	public synchronized void kick()
+	public void kick()
 	{
 		try
 		{
