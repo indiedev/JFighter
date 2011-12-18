@@ -7,7 +7,7 @@ import java.io.File;
 
 
 
-public abstract class AbstractPlayableActor extends AbstractActor implements Runnable
+public abstract class AbstractPlayableActor extends AbstractActor implements Runnable,IActorAction
 {
 	
 	
@@ -67,63 +67,66 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 	{
 		
 	}
+	
+	/**
+	 * Changes the current image of this Actor.<br />Whenever an action is invoked ,this method is called.
+	 */
 	@Override
-	public void updateCurrentActorImageDirection(int t_imageDirection)
+	public void updateCurrentImage(int t_newImage)
 	{
-		//check if it is already in specified direction
-		if(getCurrentFacingDirection()!=t_imageDirection)
-		{
 			//select the requested direction image
-			if(t_imageDirection==ActorConstants.worldLeft)
+			if(t_newImage==ActorConstants.worldLeft)
 			{
 				//change the actor image to LEFT
 				setCurrentImage(Img_Left);
-				
 			}
 			else
-			if(t_imageDirection==ActorConstants.worldRight)
+			if(t_newImage==ActorConstants.worldRight)
 			{
 				//change the actor image to RIGHT
 				setCurrentImage(Img_Right);
 			}
 			else
-			if(t_imageDirection==ActorConstants.worldUp)
+			if(t_newImage==ActorConstants.worldUp)
 			{
 				//change the actor image to UP
 				setCurrentImage(Img_Up);
 			}
 			else
-			if(t_imageDirection==ActorConstants.worldDown)
+			if(t_newImage==ActorConstants.worldDown)
 			{
 				//change the actor image to DOWN
 				setCurrentImage(Img_Down);
 			}
 			else
-			if(t_imageDirection==ActorConstants.actorWorld_LKick)
+			if(t_newImage==ActorConstants.actorWorld_LKick)
 			{
 				//change the actor image to DOWN
 				setCurrentImage(Img_L_kick);
 			}
 			else
-			if(t_imageDirection==ActorConstants.actorWorld_RKick)
+			if(t_newImage==ActorConstants.actorWorld_RKick)
 			{
 				//change the actor image to DOWN
 				setCurrentImage(Img_R_kick);
 			}
-					
-
+			else
+			{
+				throw new NullPointerException("Undefined ActorDirection!");
+			}
 			
-			//update the currentfacing direction to new(Assigned) direction
-			setCurrentFacingDirection(t_imageDirection);
-
-		}//if
+			setCurrentFacingDirection(t_newImage);
 	}
 	
+	/**
+	 * Used as polling for Actor movement.
+	 */
 	@Override
-	public void moveActor()
+	public void calculateMovement()
 	{
 		/*
-		 * Continuously changes the positional values.
+		 * Continuously checks whether the actor is within the world limits and changes the positional values.
+		 * This method actually moves the actor..If the world limits are reached ,the actor is not moved.
 		 *STEPS:
 		 *------
 		 *NO NEED TO CHECK FOR FACING DIRECTION!
@@ -158,15 +161,18 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 			{
 				//decrement ypos
 				decrementY_POS();
-				updateCurrentActorImageDirection(ActorConstants.worldUp);
+				updateCurrentImage(ActorConstants.worldUp);
 			}
 			else
 		if(getCurrentMovementDirection()==ActorConstants.worldDown && !isMaxYReached())//down
 			{
 				//increment ypos
 				incrementY_POS();
-				updateCurrentActorImageDirection(ActorConstants.worldDown);
+				updateCurrentImage(ActorConstants.worldDown);
 			}
+		//setting currentMovementDirection back to stop.
+		setCurrentMovementDirection(ActorConstants.actorSTOP);
+
 	}	
 	
 	//toggles the facing direction
@@ -174,9 +180,9 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 	public void toggleFacingDirection()
 	{
 		if(getCurrentFacingDirection()==ActorConstants.worldLeft)
-			updateCurrentActorImageDirection(ActorConstants.worldRight);
+			updateCurrentImage(ActorConstants.worldRight);
 		else
-			updateCurrentActorImageDirection(ActorConstants.worldLeft);
+			updateCurrentImage(ActorConstants.worldLeft);
 
 	}
 	public void invokeKick()
@@ -228,7 +234,7 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 		{   
 			while(isRunning)
 			{
-				System.out.println("Started jump() in Thread");
+				//System.out.println("Started jump() in Thread");
 				jump();
 			}
 		}
@@ -237,7 +243,7 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 		{   
 			while(isRunning)
 			{
-				System.out.println("Started kick() in Thread");
+				//System.out.println("Started kick() in Thread");
 				kick();
 			}
 		}
@@ -245,17 +251,18 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 		
 	}
 	
-	private void jump()
+	public synchronized void jump()
 	{
 		try
 		{
 			while(!this.isMinYReached())
 			{
-				Thread.sleep(10);
+				Thread.sleep(1000/60);
 				//move the actor UP
 				this.decrementY_POS();
 				//System.out.println("going up");
 				
+				//doing some additional actions
 				//to kick while jumping up
 				if(currentTask.equals("kick"))
 				{
@@ -266,11 +273,12 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 			
 			while(!this.isMaxYReached())
 			{
-				Thread.sleep(10);
+				Thread.sleep(1000/60);
 				//move the actor DOWN
 				this.incrementY_POS();
 				//System.out.println("going down");
 				
+				//doing some additional actions
 				//to kick while jumping down
 				if(currentTask.equals("kick"))
 				{
@@ -289,7 +297,7 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 		}
 	}
 	
-	private void kick()
+	public synchronized void kick()
 	{
 		try
 		{
@@ -297,16 +305,16 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 			
 			//back-up the current direction
 			int beforeDirection=getCurrentFacingDirection();
-			System.out.println("Backed-up direction:"+beforeDirection);
+			//System.out.println("Backed-up direction:"+beforeDirection);
 			
 			if(beforeDirection==ActorConstants.worldLeft)
 			{
-				updateCurrentActorImageDirection(ActorConstants.actorWorld_LKick);
+				updateCurrentImage(ActorConstants.actorWorld_LKick);
 			}
 			else
 			if(beforeDirection==ActorConstants.worldRight)
 			{
-				updateCurrentActorImageDirection(ActorConstants.actorWorld_RKick);
+				updateCurrentImage(ActorConstants.actorWorld_RKick);
 			}
 
 			//correcting backup direction(if error)
@@ -326,13 +334,13 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 			{
 				toggleFacingDirection();
 			}
-			Thread.sleep(400);
+			Thread.sleep(1000/5);
 			
 			
 			//restore the previous stance/Image
-			updateCurrentActorImageDirection(beforeDirection);
+			updateCurrentImage(beforeDirection);
 			
-			System.out.println("Restored direction:"+getCurrentFacingDirection());
+			//System.out.println("Restored direction:"+getCurrentFacingDirection());
 
 			//setting the tracker value to false
 			isRunning=false;
@@ -346,10 +354,39 @@ public abstract class AbstractPlayableActor extends AbstractActor implements Run
 	}
 	
 	
+	public void moveLeft()
+	{
+		setCurrentMovementDirection(ActorConstants.worldLeft);			
+	}
+	
+	public void moveRight()
+	{
+		setCurrentMovementDirection(ActorConstants.worldRight);		
+	}
+	
+	public void moveUp()
+	{
+		
+	}
+	
+	public void moveDown()
+	{
+		setCurrentMovementDirection(ActorConstants.worldDown);		
+	}
+	
 	public boolean isActorThreadRunning()
 	{
 		return isRunning;
 	}
 	
+	public void punch()
+	{
+		
+	}
+	
+	public void invokeTurn()
+	{
+		this.toggleFacingDirection();
+	}
 
 }
