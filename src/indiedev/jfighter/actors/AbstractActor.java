@@ -2,7 +2,8 @@ package indiedev.jfighter.actors;
 
 import indiedev.jfighter.Helpers.ActorConstants;
 
-import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
@@ -29,7 +30,7 @@ public abstract class AbstractActor
 	private int currentFacingDirection=ActorConstants.actorSTOP;//[CHANGE THIS TO BE DYNAMIC!]
 
 	//Actor:Images vars
-	private Image currentImage; 
+	private Image currentImage=null; 
 	
 
 	public Image getCurrentImage()
@@ -59,17 +60,18 @@ public abstract class AbstractActor
 		populateActorImages();
 		
 		//setting actor direction for 1st time
-		updateCurrentActorImageDirection(actorInitDir);
-
+		updateCurrentImage(actorInitDir);
+	
+		setCurrentFacingDirection(actorInitDir);
 		initActorPosition(xPos);
 	}
 	
 	/*
 	 * ABSTRACT METHODS
 	 */
-	abstract void updateCurrentActorImageDirection(int imageDirection);
+	abstract void updateCurrentImage(int imageDirection);
 	abstract void populateActorImages();	//load all the actor's images
-	abstract void moveActor();//move actor(Must check bound conditions within)
+	abstract void calculateMovement();//move actor(Must check bound conditions within)
 	
 	public void setSpeedFactors(int xspeed,int yspeed)
 	{
@@ -82,11 +84,13 @@ public abstract class AbstractActor
 	public static void setX_LIMIT(int temp)
 	{
 		X_LIMIT=temp;
+		System.out.println("World X-LIMIT:"+temp);
 	}
 	
 	public static void setY_LIMIT(int temp)
 	{
 		Y_LIMIT=temp;
+		System.out.println("World Y-LIMIT:"+temp);
 	}	
 	
 	//loads a single Image file
@@ -106,12 +110,17 @@ public abstract class AbstractActor
 		}
 	}
 	
-	public void drawActor(Graphics g,boolean showBounds) {
-	
+	public void drawActor(Graphics2D g2d,boolean showBounds) {
+		
+		g2d.setColor(Color.YELLOW);
+//		g2d.drawString("TestString",100	,100);
+
 		//draws the image
-		g.drawImage(getCurrentImage(),xpos,ypos,null);
+		g2d.drawImage(getCurrentImage(),getX_Pos(),getY_Pos(),null);
+	//	System.out.println(getX_Pos()+","+getY_Pos());
+
 		if(showBounds)
-			g.drawRect(xpos,ypos,getCurrentImage().getWidth(null),getCurrentImage().getHeight(null));
+			g2d.drawRect(xpos,ypos,getCurrentImage().getWidth(null),getCurrentImage().getHeight(null));
 	
 	}
 
@@ -200,18 +209,18 @@ public abstract class AbstractActor
 	{
 		if((ypos+getCurrentImage().getHeight(null))>Y_LIMIT)
 		{
-			//System.out.println("Max ylength reached:"+(ypos+imgHeight));
 			return true;
 		}
 		return false;
 	}	
-	
-	public void updateActorView()
+	//updates the actor view
+	//currently,movement is only updated 
+	public synchronized void updateActorView()
 	{
-		moveActor();
+		calculateMovement();
 	}
 	
-	public void initActorPosition(int x_position)
+	public synchronized void initActorPosition(int x_position)
 	{
 		xpos=x_position;
 		ypos=Y_LIMIT-getCurrentImage().getHeight(null);

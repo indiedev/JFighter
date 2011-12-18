@@ -24,7 +24,7 @@ public abstract class AbstractNPlayableActor extends AbstractActor
 	}
 
 	@Override
-	public void updateCurrentActorImageDirection(int imageDirection) {
+	public void updateCurrentImage(int imageDirection) {
 		//check if it is already in specified direction
 		if(getCurrentFacingDirection()!=imageDirection)
 		{
@@ -72,7 +72,7 @@ public abstract class AbstractNPlayableActor extends AbstractActor
 	}
 
 	@Override
-	public void moveActor() {
+	public void calculateMovement() {
 		/*
 		 * Continuously changes the positional values.
 		 * CURRENTLY X-AXIS ONLY
