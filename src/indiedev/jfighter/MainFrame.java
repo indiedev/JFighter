@@ -24,7 +24,7 @@ public class MainFrame extends JFrame implements WindowListener
 	KeyManager keyManager;
 	MainFrame()
 	{
-		super("JFighter MainFrame v0.2");
+		super("JFighter MainFrame");
 		//init render panel(adding the KeyManager to which the events are dispatched)
 		panel_render=new RenderPanel();
 		
