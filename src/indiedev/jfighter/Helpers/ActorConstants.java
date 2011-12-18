@@ -19,5 +19,9 @@ public class ActorConstants implements ResourceConstants{
 	public static final int actorWorld_RKick=5;
 	public static final int actorSTOP=99;	
 	
+	public enum ActorActions
+	{
+		LEFT,RIGHT,UP,DOWN,JUMP,TURN,KICK,PUNCH;
+	}
 }
 
