@@ -2,14 +2,14 @@ package indiedev.jfighter.Helpers;
 
 import java.io.File;
 
-/*
- * Contains path to entire resources
- *  PARENT DIR: \\res
-	BASEDIR_AUDIOS:{PARENT DIR}\\AUDIO
-	BASEDIR_IMAGES:{PARENT DIR}\\IMAGES
-		BASEDIR_IMG_P_ACTORS:{BASEDIR_IMAGES}\\actors\\p_actors
-		BASEDIR_IMG_NP_ACTORS:{BASEDIR_IMAGES}\\actors\\np_actors
-		BASEDIR_IMG_WORLD:{BASEDIR_IMAGES}\\world
+/**
+ * Contains path to entire resources<br />
+ *  PARENT DIR: \\res<br />
+	BASEDIR_AUDIOS:{PARENT DIR}\\AUDIO<br />
+	BASEDIR_IMAGES:{PARENT DIR}\\IMAGES<br />
+		BASEDIR_IMG_P_ACTORS:{BASEDIR_IMAGES}\\actors\\p_actors<br />
+		BASEDIR_IMG_NP_ACTORS:{BASEDIR_IMAGES}\\actors\\np_actors<br />
+		BASEDIR_IMG_WORLD:{BASEDIR_IMAGES}\\world<br />
  * 
  * 
  * 
