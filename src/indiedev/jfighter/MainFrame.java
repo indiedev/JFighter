@@ -1,11 +1,11 @@
 package indiedev.jfighter;
 
 import indiedev.jfighter.Helpers.ActorConstants;
-import indiedev.jfighter.actors.AbstractPlayableActor;
 import indiedev.jfighter.actors.Scorpion;
 import indiedev.jfighter.actors.npa_crate;
 import indiedev.jfighter.audio.WorldAudio;
 import indiedev.jfighter.canvas.RenderPanel;
+import indiedev.jfighter.controller.KeyManager;
 
 import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
@@ -16,24 +16,33 @@ import javax.swing.JFrame;
 
 public class MainFrame extends JFrame implements WindowListener
 {
+	//NOTE:First ,create the RenderPanel(bg image).Then create other stuffs
 	
 	//render panel
 	RenderPanel panel_render;
 	WorldAudio world_Audio;
-	
+	KeyManager keyManager;
 	MainFrame()
 	{
 		super("JFighter MainFrame");
-		
-		//init render panel
+		//init render panel(adding the KeyManager to which the events are dispatched)
 		panel_render=new RenderPanel();
+		
+		//creating actors
+		Scorpion scorpion=new Scorpion(ActorConstants.worldRight);
 
+		//init KeyManager(adding the actor to process)
+		keyManager=new KeyManager(scorpion);
+		
 			//adding actors to renderpanel
 			panel_render.addNonPlayableActorsToScene(new npa_crate(100));
 			panel_render.addNonPlayableActorsToScene(new npa_crate(260));
 			panel_render.addNonPlayableActorsToScene(new npa_crate(420));
-			panel_render.addActorsToScene(new Scorpion(ActorConstants.worldRight));
+			panel_render.addActorsToScene(scorpion);
 
+		//adding keymanager to renderpanel
+			panel_render.addKeyManager(keyManager);
+			
 		//init audiosystem
 		world_Audio=new WorldAudio();
 		if(world_Audio!=null)
@@ -60,12 +69,10 @@ public class MainFrame extends JFrame implements WindowListener
 		
 		if(world_Audio!=null)
 			world_Audio.resumeBGMusic();
-		
 	}
 	@Override
 	public void windowClosed(WindowEvent e) {
 		System.out.println("**BYE**");
-		
 	}
 	@Override
 	public void windowClosing(WindowEvent e) {
@@ -75,7 +82,6 @@ public class MainFrame extends JFrame implements WindowListener
 			world_Audio.destroy();
 		if(panel_render!=null)
 			panel_render.destroy();
-		
 	}
 	@Override
 	public void windowDeactivated(WindowEvent e) {
